@@ -589,8 +589,17 @@
           "name": "string_literal"
         },
         {
-          "type": "STRING",
-          "value": "null"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ref_type"
+            },
+            {
+              "type": "STRING",
+              "value": "null"
+            }
+          ]
         },
         {
           "type": "STRING",

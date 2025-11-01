@@ -98,7 +98,7 @@ module.exports = grammar({
       choice(
         $.int_literal,
         $.string_literal,
-        "null",
+        seq($.ref_type, "null"),
         "true",
         "false",
         $.global_array_def,

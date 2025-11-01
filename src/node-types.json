@@ -366,6 +366,10 @@
           "named": true
         },
         {
+          "type": "ref_type",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         }
