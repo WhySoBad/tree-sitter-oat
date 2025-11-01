@@ -1,0 +1,40 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "oat_v1",
+      "camelcase": "OatV1",
+      "title": "oat.v1",
+      "scope": "source.oat_v1",
+      "file-types": [
+        "oat"
+      ],
+      "injection-regex": "^oat_v1$",
+      "class-name": "TreeSitterOatV1",
+      "highlights": "queries/oat-v1/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Oat.v1 language used for compiler design",
+    "authors": [
+      {
+        "name": "WySBd",
+        "email": "git@wysbd.dev"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-oat_v1"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
