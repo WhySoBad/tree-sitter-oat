@@ -29,11 +29,11 @@ module.exports = grammar({
       ),
 
     // arg
-    arg: ($) => seq($.type, $.identifier),
+    arg: ($) => seq(field("type", $.type), field("name", $.identifier)),
     params: ($) =>
       seq(
         "(",
-        field("params", optional(seq($.arg, repeat(seq(",", $.arg))))),
+        field("param", optional(seq($.arg, repeat(seq(",", $.arg))))),
         ")",
       ),
 
@@ -142,7 +142,7 @@ module.exports = grammar({
 
     // assignment statement
     assign_stmt: ($) =>
-      seq(field("lhs", $.lhs), "=", field("expr", $.exp), ";"),
+      seq(field("name", $.lhs), "=", field("expr", $.exp), ";"),
 
     // variable declaration statement
     vdecl_stmt: ($) =>
@@ -172,7 +172,7 @@ module.exports = grammar({
       seq(
         "for",
         "(",
-        optional(seq($.vdecl, repeat(seq(",", $.vdecl)))),
+        optional(seq(field("param", $.vdecl), repeat(seq(",", field("param", $.vdecl))))),
         ";",
         optional($.exp),
         ";",
@@ -190,7 +190,7 @@ module.exports = grammar({
     // function call expression
     call_exp: ($) =>
       seq(
-        $.identifier,
+        field("name", $.identifier),
         "(",
         optional(seq($.exp, repeat(seq(",", $.exp)))),
         ")",

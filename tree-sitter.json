@@ -11,7 +11,9 @@
       ],
       "injection-regex": "^oat$",
       "class-name": "TreeSitterOat",
-      "highlights": "queries/oat/highlights.scm"
+      "highlights": "queries/oat/highlights.scm",
+      "tags": "queries/oat/tags.scm",
+      "locals": "queries/oat/locals.scm"
     }
   ],
   "metadata": {

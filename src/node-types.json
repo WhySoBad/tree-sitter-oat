@@ -2,20 +2,27 @@
   {
     "type": "arg",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -85,7 +92,7 @@
           }
         ]
       },
-      "lhs": {
+      "name": {
         "multiple": false,
         "required": true,
         "types": [
@@ -130,17 +137,24 @@
   {
     "type": "call_exp",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "exp",
-          "named": true
-        },
-        {
-          "type": "identifier",
           "named": true
         }
       ]
@@ -299,7 +313,18 @@
   {
     "type": "for_stmt",
     "named": true,
-    "fields": {},
+    "fields": {
+      "param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "vdecl",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -314,10 +339,6 @@
         },
         {
           "type": "stmt",
-          "named": true
-        },
-        {
-          "type": "vdecl",
           "named": true
         }
       ]
@@ -448,7 +469,7 @@
     "type": "params",
     "named": true,
     "fields": {
-      "params": {
+      "param": {
         "multiple": true,
         "required": false,
         "types": [

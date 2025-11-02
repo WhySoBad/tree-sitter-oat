@@ -1,5 +1,3 @@
-;; highlights.scm for Oat language
-;; Matches grammar.js (Oat v1)
 ;; -------------------------------------------------------------------
 ;; Basic keywords
 ;; -------------------------------------------------------------------
@@ -22,6 +20,7 @@
   "void"
 ] @type
 
+(type) @type
 (primitive_type) @type
 (ref_type) @type
 
@@ -84,13 +83,15 @@
 (vdecl
   (identifier) @variable)
 
-(assign_stmt lhs: (lhs) @variable)
+(assign_stmt name: (lhs) @variable)
 
 ;; -------------------------------------------------------------------
 ;; Misc
 ;; -------------------------------------------------------------------
 
 (array_index) @variable
+(block) @scope
+
 ;; -------------------------------------------------------------------
 ;; Brackets & punctuation
 ;; -------------------------------------------------------------------
@@ -109,7 +110,3 @@
   "]"
   "[]"
 ] @punctuation.bracket
-
-
-(call_stmt) @function.call
-(block) @scope
