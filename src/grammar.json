@@ -1,13 +1,22 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
-  "name": "oat_v1",
+  "name": "oat",
   "word": "identifier",
   "rules": {
     "prog": {
       "type": "REPEAT",
       "content": {
-        "type": "SYMBOL",
-        "name": "decl"
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "decl"
+          },
+          {
+            "type": "STRING",
+            "value": "a"
+          }
+        ]
       }
     },
     "decl": {

@@ -1,15 +1,15 @@
-package tree_sitter_oat_v1_test
+package tree_sitter_oat_test
 
 import (
 	"testing"
 
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
-	tree_sitter_oat_v1 "github.com/tree-sitter/tree-sitter-oat_v1/bindings/go"
+	tree_sitter_oat "github.com/WhySoBad/tree-sitter-oat/bindings/go"
 )
 
 func TestCanLoadGrammar(t *testing.T) {
-	language := tree_sitter.NewLanguage(tree_sitter_oat_v1.Language())
+	language := tree_sitter.NewLanguage(tree_sitter_oat.Language())
 	if language == nil {
-		t.Errorf("Error loading oat.v1 grammar")
+		t.Errorf("Error loading oat grammar")
 	}
 }

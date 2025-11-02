@@ -1,13 +1,13 @@
 [package]
-name = "tree-sitter-oat-v1"
-description = "Oat.v1 language used for compiler design"
+name = "tree-sitter-oat"
+description = "Oat language used for practicing parser and lexer basics"
 version = "0.1.0"
-authors = ["wysbd <git@wysbd.dev>"]
+authors = ["WhySoBad <git@wysbd.dev>"]
 license = "MIT"
 readme = "README.md"
-keywords = ["incremental", "parsing", "tree-sitter", "oat-v1"]
+keywords = ["incremental", "parsing", "tree-sitter", "oat"]
 categories = ["parser-implementations", "parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-oat_v1"
+repository = "https://github.com/WhySoBad/tree-sitter-oat"
 edition = "2021"
 autoexamples = false
 

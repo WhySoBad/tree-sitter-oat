@@ -1,6 +1,6 @@
 /**
- * @file Oat.v1 language used for compiler design
- * @author WySBd <git@wysbd.dev>
+ * @file Oat language used for practicing parser and lexer basics
+ * @author WhySoBad <git@wysbd.dev>
  * @license MIT
  */
 
@@ -8,12 +8,12 @@
 // @ts-check
 
 module.exports = grammar({
-  name: "oat_v1",
+  name: "oat",
   extras: ($) => [$.comment, /\s+/],
   word: ($) => $.identifier,
   rules: {
     // prog
-    prog: ($) => repeat($.decl),
+    prog: ($) => repeat(seq($.decl, "a")),
 
     // global declarations
     decl: ($) => choice($.gdecl, $.fdecl),

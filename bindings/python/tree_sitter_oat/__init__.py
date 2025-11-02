@@ -1,4 +1,4 @@
-"""Oat.v1 language used for compiler design"""
+"""Oat language used for practicing parser and lexer basics"""
 
 from importlib.resources import files as _files
 

@@ -1,4 +1,4 @@
-module github.com/tree-sitter/tree-sitter-oat_v1
+module github.com/WhySoBad/tree-sitter-oat
 
 go 1.22
 

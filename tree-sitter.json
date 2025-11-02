@@ -2,30 +2,30 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
   "grammars": [
     {
-      "name": "oat_v1",
-      "camelcase": "OatV1",
-      "title": "oat.v1",
-      "scope": "source.oat_v1",
+      "name": "oat",
+      "camelcase": "Oat",
+      "title": "oat",
+      "scope": "source.oat",
       "file-types": [
         "oat"
       ],
-      "injection-regex": "^oat_v1$",
-      "class-name": "TreeSitterOatV1",
-      "highlights": "queries/oat-v1/highlights.scm"
+      "injection-regex": "^oat$",
+      "class-name": "TreeSitterOat",
+      "highlights": "queries/oat/highlights.scm"
     }
   ],
   "metadata": {
     "version": "0.1.0",
     "license": "MIT",
-    "description": "Oat.v1 language used for compiler design",
+    "description": "Oat language used for practicing parser and lexer basics",
     "authors": [
       {
-        "name": "WySBd",
+        "name": "WhySoBad",
         "email": "git@wysbd.dev"
       }
     ],
     "links": {
-      "repository": "https://github.com/tree-sitter/tree-sitter-oat_v1"
+      "repository": "https://github.com/WhySoBad/tree-sitter-oat"
     }
   },
   "bindings": {

@@ -775,6 +775,10 @@
     "named": false
   },
   {
+    "type": "a",
+    "named": false
+  },
+  {
     "type": "bool",
     "named": false
   },

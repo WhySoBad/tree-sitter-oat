@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(tree-sitter-oat-v1
+project(tree-sitter-oat
         VERSION "0.1.0"
-        DESCRIPTION "Oat.v1 language used for compiler design"
-        HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-oat_v1"
+        DESCRIPTION "Oat language used for practicing parser and lexer basics"
+        HOMEPAGE_URL "https://github.com/WhySoBad/tree-sitter-oat"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -26,40 +26,40 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.c"
                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                    COMMENT "Generating parser.c")
 
-add_library(tree-sitter-oat-v1 src/parser.c)
+add_library(tree-sitter-oat src/parser.c)
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/scanner.c)
-  target_sources(tree-sitter-oat-v1 PRIVATE src/scanner.c)
+  target_sources(tree-sitter-oat PRIVATE src/scanner.c)
 endif()
-target_include_directories(tree-sitter-oat-v1
+target_include_directories(tree-sitter-oat
                            PRIVATE src
                            INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/bindings/c>
                                      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_compile_definitions(tree-sitter-oat-v1 PRIVATE
+target_compile_definitions(tree-sitter-oat PRIVATE
                            $<$<BOOL:${TREE_SITTER_REUSE_ALLOCATOR}>:TREE_SITTER_REUSE_ALLOCATOR>
                            $<$<CONFIG:Debug>:TREE_SITTER_DEBUG>)
 
-set_target_properties(tree-sitter-oat-v1
+set_target_properties(tree-sitter-oat
                       PROPERTIES
                       C_STANDARD 11
                       POSITION_INDEPENDENT_CODE ON
                       SOVERSION "${TREE_SITTER_ABI_VERSION}.${PROJECT_VERSION_MAJOR}"
                       DEFINE_SYMBOL "")
 
-configure_file(bindings/c/tree-sitter-oat-v1.pc.in
-               "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-oat-v1.pc" @ONLY)
+configure_file(bindings/c/tree-sitter-oat.pc.in
+               "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-oat.pc" @ONLY)
 
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bindings/c/tree_sitter"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         FILES_MATCHING PATTERN "*.h")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-oat-v1.pc"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-oat.pc"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-install(TARGETS tree-sitter-oat-v1
+install(TARGETS tree-sitter-oat
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
 file(GLOB QUERIES queries/*.scm)
 install(FILES ${QUERIES}
-        DESTINATION "${CMAKE_INSTALL_DATADIR}/tree-sitter/queries/oat-v1")
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/tree-sitter/queries/oat")
 
 add_custom_target(ts-test "${TREE_SITTER_CLI}" test
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

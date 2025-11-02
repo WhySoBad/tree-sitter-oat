@@ -1,11 +1,11 @@
 {
-  "name": "tree-sitter-oat-v1",
+  "name": "tree-sitter-oat",
   "version": "0.1.0",
-  "description": "Oat.v1 language used for compiler design",
-  "repository": "https://github.com/tree-sitter/tree-sitter-oat_v1",
+  "description": "Oat language used for practicing parser and lexer basics",
+  "repository": "https://github.com/WhySoBad/tree-sitter-oat",
   "license": "MIT",
   "author": {
-    "name": "wysbd",
+    "name": "WhySoBad",
     "email": "git@wysbd.dev"
   },
   "main": "bindings/node",
@@ -14,7 +14,7 @@
     "incremental",
     "parsing",
     "tree-sitter",
-    "oat_v1"
+    "oat"
   ],
   "files": [
     "grammar.js",
