@@ -6,17 +6,8 @@
     "prog": {
       "type": "REPEAT",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "decl"
-          },
-          {
-            "type": "STRING",
-            "value": "a"
-          }
-        ]
+        "type": "SYMBOL",
+        "name": "decl"
       }
     },
     "decl": {
