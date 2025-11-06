@@ -220,7 +220,7 @@ module.exports = grammar({
     array_def_init: ($) => seq("new", $.primitive_type, "[", $.exp, "]"),
 
     // integer literal token
-    int_literal: ($) => token(choice(seq(optional("-"), /[0-9]+/))),
+    int_literal: ($) => token(seq(optional("-"), choice(/[0-9]+/, /0x[0-9A-Fa-f]+/))),
 
     // string literal token
     string_literal: ($) =>
