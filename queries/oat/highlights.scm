@@ -109,4 +109,5 @@
   "["
   "]"
   "[]"
+  "[]{"
 ] @punctuation.bracket
