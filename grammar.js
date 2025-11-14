@@ -10,13 +10,13 @@
 module.exports = grammar({
   name: "oat",
   extras: ($) => [$.comment, /\s+/],
-  word: ($) => $.identifier,
+  word: ($) => $.keyword,
   rules: {
     // prog
     prog: ($) => repeat($.decl),
 
     // global declarations
-    decl: ($) => choice($.gdecl, $.fdecl),
+    decl: ($) => choice($.tdecl, $.gdecl, $.fdecl),
 
     // global variable declarations
     gdecl: ($) =>
@@ -46,13 +46,32 @@ module.exports = grammar({
         field("body", $.block),
       ),
 
+    // struct field declaration
+    field: ($) => seq(field("type", $.type), field("name", $.identifier)),
+    fields: ($) =>
+      seq(
+        "{",
+        choice(optional($.field), seq($.field, repeat(seq(";", $.field)))),
+        "}",
+      ),
+    // struct declaration
+    tdecl: ($) => seq("struct", field("name", $.struct_name), $.fields),
+
     // blocks
     block: ($) => seq("{", repeat($.stmt), "}"),
 
     // types
-    type: ($) => choice($.primitive_type, $.ref_type),
+    type: ($) =>
+      choice($.primitive_type, prec(100, $.ref_type), seq($.ref_type, "?")),
     primitive_type: ($) => choice("int", "bool"),
-    ref_type: ($) => choice("string", seq($.type, "[]")),
+    ref_type: ($) =>
+      choice(
+        "string",
+        $.struct_name,
+        prec(90, seq($.type, "[]")),
+        $.ftype,
+        prec(110, seq("(", $.ref_type, ")")),
+      ),
 
     // function types
     ftype: ($) =>
@@ -102,10 +121,11 @@ module.exports = grammar({
         "true",
         "false",
         $.global_array_def,
+        $.global_struct_def,
       ),
 
     // lhs expressions
-    lhs: ($) => choice($.identifier, $.array_index),
+    lhs: ($) => choice($.identifier, $.struct_index, $.array_index),
 
     // expressions
     exp: ($) =>
@@ -120,9 +140,12 @@ module.exports = grammar({
         $.array_index,
         $.array_def,
         $.array_def_init,
+        $.struct_def,
+        $.struct_index,
         $.bexp,
         $.uexp,
         seq("(", $.exp, ")"),
+        "0",
       ),
 
     // local declarations
@@ -136,6 +159,7 @@ module.exports = grammar({
         $.return_stmt,
         $.call_stmt,
         $.if_stmt,
+        $.if_cast_stmt,
         $.for_stmt,
         $.while_stmt,
       ),
@@ -164,6 +188,19 @@ module.exports = grammar({
         field("consequence", $.block),
         optional($.else_stmt),
       ),
+    // null-checked downcast
+    if_cast_stmt: ($) =>
+      seq(
+        "if?",
+        "(",
+        $.ref_type,
+        $.identifier,
+        "=",
+        $.exp,
+        ")",
+        $.block,
+        optional($.else_stmt),
+      ),
     // else statement
     else_stmt: ($) => choice(seq("else", $.block), seq("else", $.if_stmt)),
 
@@ -172,7 +209,12 @@ module.exports = grammar({
       seq(
         "for",
         "(",
-        optional(seq(field("param", $.vdecl), repeat(seq(",", field("param", $.vdecl))))),
+        optional(
+          seq(
+            field("param", $.vdecl),
+            repeat(seq(",", field("param", $.vdecl))),
+          ),
+        ),
         ";",
         optional($.exp),
         ";",
@@ -187,10 +229,13 @@ module.exports = grammar({
     // index into an array
     array_index: ($) => seq($.exp, "[", $.exp, "]"),
 
+    // index into a struct
+    struct_index: ($) => seq($.exp, ".", $.identifier),
+
     // function call expression
     call_exp: ($) =>
       seq(
-        field("name", $.identifier),
+        field("name", $.exp),
         "(",
         optional(seq($.exp, repeat(seq(",", $.exp)))),
         ")",
@@ -201,7 +246,8 @@ module.exports = grammar({
       seq(
         "new",
         $.type,
-        "[]{",
+        "[]",
+        "{",
         optional(seq($.exp, repeat(seq(",", $.exp)))),
         "}",
       ),
@@ -211,7 +257,8 @@ module.exports = grammar({
       seq(
         "new",
         $.type,
-        "[]{",
+        "[]",
+        "{",
         optional(seq($.gexp, repeat(seq(",", $.gexp)))),
         "}",
       ),
@@ -219,15 +266,54 @@ module.exports = grammar({
     // array definition with default initializer
     array_def_init: ($) => seq("new", $.primitive_type, "[", $.exp, "]"),
 
+    // struct field initializer
+    struct_field_init: ($) =>
+      seq(field("name", $.identifier), "=", field("value", $.exp)),
+    // struct definition
+    struct_def: ($) =>
+      seq(
+        "new",
+        field("name", $.struct_name),
+        "{",
+        choice(
+          optional($.struct_field_init),
+          seq($.struct_field_init, repeat(seq(";", $.struct_field_init))),
+        ),
+        "}",
+      ),
+
+    // global struct field initializer
+    global_field_init: ($) =>
+      seq(field("name", $.identifier), "=", field("value", $.gexp)),
+    // global struct definition
+    global_struct_def: ($) =>
+      seq(
+        "new",
+        field("name", $.struct_name),
+        "{",
+        choice(
+          optional($.global_field_init),
+          seq($.global_field_init, repeat(seq(";", $.global_field_init))),
+        ),
+        "}",
+      ),
+
     // integer literal token
-    int_literal: ($) => token(seq(optional("-"), choice(/[0-9]+/, /0x[0-9A-Fa-f]+/))),
+    int_literal: ($) =>
+      token(seq(optional("-"), choice(/[0-9]+/, /0x[0-9A-Fa-f]+/))),
 
     // string literal token
     string_literal: ($) =>
       token(seq('"', repeat(choice(/[^"\\\n]/, /\\./)), '"')),
 
-    // identifier
-    identifier: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
+    // keywords are lowercase words
+    keyword: ($) => /[a-z]*/,
+
+    // identifiers start with lowercase letter
+    identifier: ($) => /[a-z_][A-Za-z0-9_]*/,
+
+    // struct names are capitalized
+    struct_name: ($) => /[A-Z_][A-Za-z0-9_]*/,
 
     // comments: C style single-line and multi-line
     comment: ($) =>

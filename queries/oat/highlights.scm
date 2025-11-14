@@ -14,6 +14,7 @@
   "null"
   "true"
   "false"
+  "struct"
 ] @keyword
 
 [
@@ -23,6 +24,7 @@
 (type) @type
 (primitive_type) @type
 (ref_type) @type
+(struct_name) @type
 
 [
   "+"
@@ -56,7 +58,7 @@
   name: (identifier) @function)
 
 (call_exp
-  (identifier) @function.call)
+  (exp) @function.call)
 
 (params
   (arg
@@ -109,5 +111,4 @@
   "["
   "]"
   "[]"
-  "[]{"
 ] @punctuation.bracket

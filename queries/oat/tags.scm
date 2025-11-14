@@ -6,4 +6,4 @@
   name: (identifier) @name) @definition.global
 
 (call_exp
-  name: (identifier) @name) @reference.call
+  name: (exp) @name) @reference.call

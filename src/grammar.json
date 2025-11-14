@@ -1,7 +1,7 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "oat",
-  "word": "identifier",
+  "word": "keyword",
   "rules": {
     "prog": {
       "type": "REPEAT",
@@ -13,6 +13,10 @@
     "decl": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "tdecl"
+        },
         {
           "type": "SYMBOL",
           "name": "gdecl"
@@ -160,6 +164,103 @@
         }
       ]
     },
+    "field": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
+    "fields": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "field"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "field"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ";"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "field"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "tdecl": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "struct"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "struct_name"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fields"
+        }
+      ]
+    },
     "block": {
       "type": "SEQ",
       "members": [
@@ -188,8 +289,25 @@
           "name": "primitive_type"
         },
         {
-          "type": "SYMBOL",
-          "name": "ref_type"
+          "type": "PREC",
+          "value": 100,
+          "content": {
+            "type": "SYMBOL",
+            "name": "ref_type"
+          }
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ref_type"
+            },
+            {
+              "type": "STRING",
+              "value": "?"
+            }
+          ]
         }
       ]
     },
@@ -214,17 +332,50 @@
           "value": "string"
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "type"
-            },
-            {
-              "type": "STRING",
-              "value": "[]"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "struct_name"
+        },
+        {
+          "type": "PREC",
+          "value": 90,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type"
+              },
+              {
+                "type": "STRING",
+                "value": "[]"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ftype"
+        },
+        {
+          "type": "PREC",
+          "value": 110,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "SYMBOL",
+                "name": "ref_type"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          }
         }
       ]
     },
@@ -620,6 +771,10 @@
         {
           "type": "SYMBOL",
           "name": "global_array_def"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "global_struct_def"
         }
       ]
     },
@@ -629,6 +784,10 @@
         {
           "type": "SYMBOL",
           "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct_index"
         },
         {
           "type": "SYMBOL",
@@ -681,6 +840,14 @@
         },
         {
           "type": "SYMBOL",
+          "name": "struct_def"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct_index"
+        },
+        {
+          "type": "SYMBOL",
           "name": "bexp"
         },
         {
@@ -703,6 +870,10 @@
               "value": ")"
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": "0"
         }
       ]
     },
@@ -753,6 +924,10 @@
         {
           "type": "SYMBOL",
           "name": "if_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "if_cast_stmt"
         },
         {
           "type": "SYMBOL",
@@ -890,6 +1065,55 @@
             "type": "SYMBOL",
             "name": "block"
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "else_stmt"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "if_cast_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "if?"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ref_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exp"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
         },
         {
           "type": "CHOICE",
@@ -1076,6 +1300,23 @@
         }
       ]
     },
+    "struct_index": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "exp"
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        }
+      ]
+    },
     "call_exp": {
       "type": "SEQ",
       "members": [
@@ -1084,7 +1325,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "exp"
           }
         },
         {
@@ -1143,7 +1384,11 @@
         },
         {
           "type": "STRING",
-          "value": "[]{"
+          "value": "[]"
+        },
+        {
+          "type": "STRING",
+          "value": "{"
         },
         {
           "type": "CHOICE",
@@ -1197,7 +1442,11 @@
         },
         {
           "type": "STRING",
-          "value": "[]{"
+          "value": "[]"
+        },
+        {
+          "type": "STRING",
+          "value": "{"
         },
         {
           "type": "CHOICE",
@@ -1260,6 +1509,190 @@
         {
           "type": "STRING",
           "value": "]"
+        }
+      ]
+    },
+    "struct_field_init": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "exp"
+          }
+        }
+      ]
+    },
+    "struct_def": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "new"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "struct_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "struct_field_init"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "struct_field_init"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ";"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "struct_field_init"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "global_field_init": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "gexp"
+          }
+        }
+      ]
+    },
+    "global_struct_def": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "new"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "struct_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "global_field_init"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "global_field_init"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ";"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "global_field_init"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
         }
       ]
     },
@@ -1328,9 +1761,17 @@
         ]
       }
     },
+    "keyword": {
+      "type": "PATTERN",
+      "value": "[a-z]*"
+    },
     "identifier": {
       "type": "PATTERN",
-      "value": "[A-Za-z_][A-Za-z0-9_]*"
+      "value": "[a-z_][A-Za-z0-9_]*"
+    },
+    "struct_name": {
+      "type": "PATTERN",
+      "value": "[A-Z_][A-Za-z0-9_]*"
     },
     "comment": {
       "type": "TOKEN",
