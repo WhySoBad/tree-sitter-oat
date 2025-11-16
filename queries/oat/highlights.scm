@@ -47,6 +47,7 @@
   "!"
   "~"
   "="
+  "?"
 ] @operator
 
 ;; -------------------------------------------------------------------
@@ -59,7 +60,7 @@
   name: (identifier) @function)
 
 (call_exp
-  (exp) @function.call)
+  name: (exp (identifier)) @function.call)
 
 (params
   (arg

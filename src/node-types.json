@@ -1064,10 +1064,6 @@
     "named": false
   },
   {
-    "type": "0",
-    "named": false
-  },
-  {
     "type": ";",
     "named": false
   },
@@ -1162,10 +1158,6 @@
   },
   {
     "type": "if",
-    "named": false
-  },
-  {
-    "type": "if?",
     "named": false
   },
   {

@@ -4,6 +4,8 @@
 
 (block) @local.scope
 
+(for_stmt) @local.scope
+
 ;; -------------------------------------------------------------------
 ;; Definitions
 ;; -------------------------------------------------------------------
@@ -27,6 +29,9 @@
 (array_def_init_fn
   variable: (identifier) @local.definition
   initializer: (exp) @local.scope)
+
+(if_cast_stmt
+  (identifier) @local.definition)
 
 ;; -------------------------------------------------------------------
 ;; References

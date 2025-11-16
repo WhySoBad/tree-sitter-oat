@@ -147,7 +147,6 @@ module.exports = grammar({
         $.uexp,
         seq("length", "(", $.exp, ")"),
         seq("(", $.exp, ")"),
-        "0",
       ),
 
     // local declarations
@@ -193,7 +192,8 @@ module.exports = grammar({
     // null-checked downcast
     if_cast_stmt: ($) =>
       seq(
-        "if?",
+        "if",
+        "?",
         "(",
         $.ref_type,
         $.identifier,
@@ -236,17 +236,17 @@ module.exports = grammar({
 
     // function call expression
     call_exp: ($) =>
-      seq(
+      prec(100, seq(
         field("name", $.exp),
         "(",
         optional(seq($.exp, repeat(seq(",", $.exp)))),
         ")",
-      ),
+      )),
 
     // array definition
     array_def: ($) =>
       seq(
-        "new",
+        optional("new"),
         $.type,
         "[]",
         "{",
@@ -257,7 +257,7 @@ module.exports = grammar({
     // global array definition
     global_array_def: ($) =>
       seq(
-        "new",
+        optional("new"),
         $.type,
         "[]",
         "{",
@@ -268,7 +268,19 @@ module.exports = grammar({
     // array definition with default initializer
     array_def_init: ($) => seq("new", $.type, "[", $.exp, "]"),
     // array definition with default initializer function
-    array_def_init_fn: ($) => seq("new", $.type, "[", $.exp, "]", "{", field("variable", $.identifier), "->", field("initializer", $.exp), "}"),
+    array_def_init_fn: ($) =>
+      seq(
+        "new",
+        $.type,
+        "[",
+        $.exp,
+        "]",
+        "{",
+        field("variable", $.identifier),
+        "->",
+        field("initializer", $.exp),
+        "}",
+      ),
 
     // struct field initializer
     struct_field_init: ($) =>
@@ -276,7 +288,7 @@ module.exports = grammar({
     // struct definition
     struct_def: ($) =>
       seq(
-        "new",
+        optional("new"),
         field("name", $.struct_name),
         "{",
         choice(
@@ -292,7 +304,7 @@ module.exports = grammar({
     // global struct definition
     global_struct_def: ($) =>
       seq(
-        "new",
+        optional("new"),
         field("name", $.struct_name),
         "{",
         choice(
