@@ -78,8 +78,7 @@ module.exports = grammar({
       seq(
         "(",
         optional(seq($.type, repeat(seq(",", $.type)))),
-        ")",
-        "->",
+        ") ->",
         $.retty,
       ),
     // return types
