@@ -70,7 +70,7 @@ module.exports = grammar({
         $.struct_name,
         prec(90, seq($.type, "[]")),
         $.ftype,
-        prec(110, seq("(", $.ref_type, ")")),
+        seq("(", $.ref_type, ")"),
       ),
 
     // function types
@@ -122,6 +122,7 @@ module.exports = grammar({
         "false",
         $.global_array_def,
         $.global_struct_def,
+        $.identifier,
       ),
 
     // lhs expressions
@@ -236,12 +237,15 @@ module.exports = grammar({
 
     // function call expression
     call_exp: ($) =>
-      prec(100, seq(
-        field("name", $.exp),
-        "(",
-        optional(seq($.exp, repeat(seq(",", $.exp)))),
-        ")",
-      )),
+      prec(
+        100,
+        seq(
+          field("name", $.exp),
+          "(",
+          optional(seq($.exp, repeat(seq(",", $.exp)))),
+          ")",
+        ),
+      ),
 
     // array definition
     array_def: ($) =>
